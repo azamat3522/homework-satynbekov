@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}Create{% endblock %}
+{% block title %}Create Status{% endblock %}
 
 {% block content %}
-    <h1>Create Task</h1>
+    <h1>Create status</h1>
 
-    <form method="post" action="/task/add/">
+    <form method="post" action="/status/add/">
         {% include 'partial/task_form.html' with button_text="Create" %}
 
     </form>
