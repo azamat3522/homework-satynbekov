@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Create{% endblock %}
+
+{% block menu %}
+    <li><a href="{% url 'task_view' task.pk %}">View</a></li>
+{% endblock %}
+
+{% block content %}
+    <h1>Update Task</h1>
+
+    <form method="POST" action="{% url 'task_update' task.pk %}">
+        {% include 'partial/task_form.html' with button_text="Update" %}
+    </form>
+
+{% endblock %}
