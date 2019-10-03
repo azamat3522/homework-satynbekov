@@ -76,3 +76,8 @@ h1 {
    border: solid 1px red;
    box-shadow: red 0 0 3px;
 }
+
+.pagination_task {
+    text-align: center;
+    margin: 30px 30px;
+}

@@ -17,7 +17,8 @@ from django.contrib import admin
 from django.urls import path
 
 from webapp.views import IndexView, TaskCreateView, TaskView, TaskUpdateView, TaskDeleteView, StatusIndexView, \
-    StatusCreateView, StatusUpdateView, StatusDeleteView, TypeIndexView, TypeCreateView, TypeUpdateView, TypeDeleteView
+    StatusCreateView, StatusUpdateView, StatusDeleteView, TypeIndexView, TypeCreateView, TypeUpdateView, \
+    TypeDeleteView
 
 urlpatterns = [
     path('admin/', admin.site.urls),

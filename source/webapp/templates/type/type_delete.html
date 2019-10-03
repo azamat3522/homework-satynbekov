@@ -4,7 +4,7 @@
 
 
 {% block content %}
-    <h1>Are you sure to delete{{ type }}?</h1>
+    <h1>Are you sure to delete {{ type }}?</h1>
 
     <form method="POST" action="{% url 'type_delete' type.pk %}" class="text-centre">
         {% csrf_token %}

@@ -2,9 +2,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView, ListView
 
-
 from webapp.forms import TaskForm
 from webapp.models import Task
+from webapp.views.base_views import DetailView
 
 
 class IndexView(ListView):
@@ -15,16 +15,12 @@ class IndexView(ListView):
     paginate_orphans = 1
 
 
-
-
-class TaskView(TemplateView):
+class TaskView(DetailView):
+    context_key = 'task'
+    model = Task
+    object_pk = 0
     template_name = 'issue/task.html'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        task_pk = kwargs.get('pk')
-        context['issue'] = get_object_or_404(Task, pk=task_pk)
-        return context
 
 
 class TaskCreateView(View):
@@ -33,7 +29,7 @@ class TaskCreateView(View):
         form = TaskForm()
         return render(request, 'issue/create.html', context={'form': form})
 
-    def post(self,request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = TaskForm(data=request.POST)
         if form.is_valid():
             task = Task.objects.create(
@@ -49,7 +45,6 @@ class TaskCreateView(View):
 
 class TaskUpdateView(View):
 
-
     def get(self, request, *args, **kwargs):
         task_pk = kwargs.get('pk')
         task = get_object_or_404(Task, pk=task_pk)
@@ -57,11 +52,11 @@ class TaskUpdateView(View):
             'summary': task.summary,
             'description': task.description,
             'status': task.status_id,
-            'type':task.type_id
+            'type': task.type_id
         })
         return render(request, 'issue/update.html', context={
             'form': form,
-            'issue': task
+            'task': task
         })
 
     def post(self, request, *args, **kwargs):
@@ -76,7 +71,7 @@ class TaskUpdateView(View):
             task.save()
             return redirect('task_view', pk=task.pk)
         else:
-            return render(request, 'issue/update.html', context={'form': form, 'issue': task})
+            return render(request, 'issue/update.html', context={'form': form, 'task': task})
 
 
 class TaskDeleteView(View):
@@ -84,14 +79,10 @@ class TaskDeleteView(View):
     def get(self, request, *args, **kwargs):
         task_pk = kwargs.get('pk')
         task = get_object_or_404(Task, pk=task_pk)
-        return render(request, 'issue/delete.html', context={'issue': task})
+        return render(request, 'issue/delete.html', context={'task': task})
 
     def post(self, request, *args, **kwargs):
         task_pk = kwargs.get('pk')
         task = get_object_or_404(Task, pk=task_pk)
         task.delete()
         return redirect('index')
-
-
-
-
