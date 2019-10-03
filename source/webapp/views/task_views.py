@@ -1,19 +1,20 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 
 from webapp.forms import TaskForm
 from webapp.models import Task
 
 
-class IndexView(TemplateView):
+class IndexView(ListView):
+    context_object_name = 'tasks'
+    model = Task
     template_name = 'issue/index.html'
+    paginate_by = 3
+    paginate_orphans = 1
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['tasks'] = Task.objects.all()
-        return context
+
 
 
 class TaskView(TemplateView):
@@ -22,7 +23,7 @@ class TaskView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         task_pk = kwargs.get('pk')
-        context['task'] = get_object_or_404(Task, pk=task_pk)
+        context['issue'] = get_object_or_404(Task, pk=task_pk)
         return context
 
 
@@ -60,7 +61,7 @@ class TaskUpdateView(View):
         })
         return render(request, 'issue/update.html', context={
             'form': form,
-            'task': task
+            'issue': task
         })
 
     def post(self, request, *args, **kwargs):
@@ -75,7 +76,7 @@ class TaskUpdateView(View):
             task.save()
             return redirect('task_view', pk=task.pk)
         else:
-            return render(request, 'issue/update.html', context={'form': form, 'task': task})
+            return render(request, 'issue/update.html', context={'form': form, 'issue': task})
 
 
 class TaskDeleteView(View):
@@ -83,7 +84,7 @@ class TaskDeleteView(View):
     def get(self, request, *args, **kwargs):
         task_pk = kwargs.get('pk')
         task = get_object_or_404(Task, pk=task_pk)
-        return render(request, 'issue/delete.html', context={'task': task})
+        return render(request, 'issue/delete.html', context={'issue': task})
 
     def post(self, request, *args, **kwargs):
         task_pk = kwargs.get('pk')

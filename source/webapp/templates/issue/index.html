@@ -11,7 +11,9 @@
 
     <h1>Tasks:</h1>
     <hr/>
-
+    {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}
     {% for task in tasks %}
         {% csrf_token %}
         <h2>Summary:{{ task.summary }}</h2>

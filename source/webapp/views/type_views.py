@@ -1,18 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 
 from webapp.forms import TypeForm
 from webapp.models import Type
 
 
-class TypeIndexView(TemplateView):
+class TypeIndexView(ListView):
+    context_object_name = 'types'
+    model = Type
     template_name = 'type/type_index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['types'] = Type.objects.all()
-        return context
 
 
 class TypeCreateView(View):
@@ -42,6 +39,7 @@ class TypeUpdateView(View):
             'form': form,
             'type': type
         })
+
     def post(self, request, *args, **kwargs):
         type_pk = kwargs.get('pk')
         type = get_object_or_404(Type, pk=type_pk)
@@ -52,7 +50,6 @@ class TypeUpdateView(View):
             return redirect('type')
         else:
             return render(request, 'type/type_update.html', context={'form': form, 'type': type})
-
 
 
 class TypeDeleteView(View):
