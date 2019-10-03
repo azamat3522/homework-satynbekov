@@ -17,6 +17,7 @@
         <h2>Summary:{{ task.summary }}</h2>
         <div>Description: {{ task.description }}</div>
         <div>Status:{{ task.status }}</div>
+        <div>Type:{{ task.type }}</div>
         <p>Data:{{ task.created_at|date:'d.m.Y H:i:s'}}</p>
             <p>
                 <a href="{% url 'task_view' task.pk %}">More...</a>

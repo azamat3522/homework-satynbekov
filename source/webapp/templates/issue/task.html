@@ -11,5 +11,6 @@
     <h2>Summary:{{ task.summary }}</h2>
         <div class="pre">Description: {{ task.description }}</div>
         <div>Status:{{ task.status }}</div>
+        <div>Type:{{ task.type }}</div>
         <p>Data:{{ task.created_at|date:'d.m.Y H:i:s'}}</p>
 {% endblock %}
