@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
+from django.urls import reverse
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 from webapp.forms import TaskForm
 from webapp.models import Task
@@ -21,25 +22,13 @@ class TaskView(DetailView):
     template_name = 'issue/task.html'
 
 
+class TaskCreateView(CreateView):
+    model = Task
+    template_name = 'issue/create.html'
+    form_class = TaskForm
 
-class TaskCreateView(View):
-
-    def get(self, request, *args, **kwargs):
-        form = TaskForm()
-        return render(request, 'issue/create.html', context={'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = TaskForm(data=request.POST)
-        if form.is_valid():
-            task = Task.objects.create(
-                summary=form.cleaned_data['summary'],
-                description=form.cleaned_data['description'],
-                status=form.cleaned_data['status'],
-                type=form.cleaned_data['type']
-            )
-            return redirect('task_view', pk=task.pk)
-        else:
-            return render(request, 'issue/create.html', context={'form': form})
+    def get_success_url(self):
+        return reverse('task_view', kwargs={'pk': self.object.pk})
 
 
 class TaskUpdateView(View):
