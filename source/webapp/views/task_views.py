@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView
 
 from webapp.forms import TaskForm
 from webapp.models import Task
-
+from webapp.views.base_views import UpdateView, DeleteView
 
 
 class IndexView(ListView):
@@ -31,46 +31,21 @@ class TaskCreateView(CreateView):
         return reverse('task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskUpdateView(View):
+class TaskUpdateView(UpdateView):
+    form_class = TaskForm
+    template_name = 'issue/update.html'
+    model = Task
+    key = 'task'
 
-    def get(self, request, *args, **kwargs):
-        task_pk = kwargs.get('pk')
-        task = get_object_or_404(Task, pk=task_pk)
-        form = TaskForm(data={
-            'summary': task.summary,
-            'description': task.description,
-            'status': task.status_id,
-            'type': task.type_id
-        })
-        return render(request, 'issue/update.html', context={
-            'form': form,
-            'task': task
-        })
-
-    def post(self, request, *args, **kwargs):
-        task_pk = kwargs.get('pk')
-        task = get_object_or_404(Task, pk=task_pk)
-        form = TaskForm(data=request.POST)
-        if form.is_valid():
-            task.summary = form.cleaned_data['summary']
-            task.description = form.cleaned_data['description']
-            task.status_id = form.cleaned_data['status']
-            task.type_id = form.cleaned_data['type']
-            task.save()
-            return redirect('task_view', pk=task.pk)
-        else:
-            return render(request, 'issue/update.html', context={'form': form, 'task': task})
+    def get_redirect_url(self):
+        redirect('task_view', pk=self.object.pk)
 
 
-class TaskDeleteView(View):
+class TaskDeleteView(DeleteView):
+    template_name = 'issue/delete.html'
+    model = Task
+    key = 'task'
 
-    def get(self, request, *args, **kwargs):
-        task_pk = kwargs.get('pk')
-        task = get_object_or_404(Task, pk=task_pk)
-        return render(request, 'issue/delete.html', context={'task': task})
+    def get_redirect_url(self):
+        return reverse('index')
 
-    def post(self, request, *args, **kwargs):
-        task_pk = kwargs.get('pk')
-        task = get_object_or_404(Task, pk=task_pk)
-        task.delete()
-        return redirect('index')

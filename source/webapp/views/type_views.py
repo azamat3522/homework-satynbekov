@@ -5,6 +5,7 @@ from django.views.generic import TemplateView, ListView, CreateView
 
 from webapp.forms import TypeForm
 from webapp.models import Type
+from webapp.views.base_views import UpdateView, DeleteView
 
 
 class TypeIndexView(ListView):
@@ -22,42 +23,20 @@ class TypeCreateView(CreateView):
         return reverse('type')
 
 
-class TypeUpdateView(View):
-    def get(self, request, *args, **kwargs):
-        type_pk = kwargs.get('pk')
-        type = get_object_or_404(Type, pk=type_pk)
-        form = TypeForm(data={
-            'name': type.name
-        })
-        return render(request, 'type/type_update.html', context={
-            'form': form,
-            'type': type
-        })
+class TypeUpdateView(UpdateView):
+    form_class = TypeForm
+    template_name = 'type/type_update.html'
+    model = Type
+    key = 'type'
 
-    def post(self, request, *args, **kwargs):
-        type_pk = kwargs.get('pk')
-        type = get_object_or_404(Type, pk=type_pk)
-        form = TypeForm(data=request.POST)
-        if form.is_valid():
-            type.name = form.cleaned_data['name']
-            type.save()
-            return redirect('type')
-        else:
-            return render(request, 'type/type_update.html', context={'form': form, 'type': type})
+    def get_redirect_url(self):
+        return reverse('type')
 
 
-class TypeDeleteView(View):
+class TypeDeleteView(DeleteView):
+    template_name = 'type/type_delete.html'
+    model = Type
+    key = 'type'
 
-    def get(self, request, *args, **kwargs):
-        type_pk = kwargs.get('pk')
-        type = get_object_or_404(Type, pk=type_pk)
-        return render(request, 'type/type_delete.html', context={'type': type})
-
-    def post(self, request, *args, **kwargs):
-        type_pk = kwargs.get('pk')
-        type = get_object_or_404(Type, pk=type_pk)
-        try:
-            type.delete()
-            return redirect('type')
-        except:
-            raise Exception('Cannot delete type')
+    def get_redirect_url(self):
+        return reverse('type')

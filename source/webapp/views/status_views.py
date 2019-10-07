@@ -5,6 +5,7 @@ from django.views.generic import ListView, CreateView
 
 from webapp.forms import StatusForm
 from webapp.models import Status
+from webapp.views.base_views import UpdateView, DeleteView
 
 
 class StatusIndexView(ListView):
@@ -22,42 +23,20 @@ class StatusCreateView(CreateView):
         return reverse('status')
 
 
-class StatusUpdateView(View):
-    def get(self, request, *args, **kwargs):
-        status_pk = kwargs.get('pk')
-        status = get_object_or_404(Status, pk=status_pk)
-        form = StatusForm(data={
-            'name': status.name
-        })
-        return render(request, 'status/status_update.html', context={
-            'form': form,
-            'status': status
-        })
+class StatusUpdateView(UpdateView):
+    form_class = StatusForm
+    template_name = 'status/status_update.html'
+    model = Status
+    key = 'status'
 
-    def post(self, request, *args, **kwargs):
-        status_pk = kwargs.get('pk')
-        status = get_object_or_404(Status, pk=status_pk)
-        form = StatusForm(data=request.POST)
-        if form.is_valid():
-            status.name = form.cleaned_data['name']
-            status.save()
-            return redirect('status')
-        else:
-            return render(request, 'status/status_update.html', context={'form': form, 'status': status})
+    def get_redirect_url(self):
+        return reverse('status')
 
 
-class StatusDeleteView(View):
+class StatusDeleteView(DeleteView):
+    template_name = 'status/status_delete.html'
+    model = Status
+    key = 'status'
 
-    def get(self, request, *args, **kwargs):
-        status_pk = kwargs.get('pk')
-        status = get_object_or_404(Status, pk=status_pk)
-        return render(request, 'status/status_delete.html', context={'status': status})
-
-    def post(self, request, *args, **kwargs):
-        status_pk = kwargs.get('pk')
-        status = get_object_or_404(Status, pk=status_pk)
-        try:
-            status.delete()
-            return redirect('status')
-        except:
-            raise Exception('Cannot delete status')
+    def get_redirect_url(self):
+        return reverse('status')
