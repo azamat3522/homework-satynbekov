@@ -1,10 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
-from django.views.generic import TemplateView, ListView
+from django.views.generic import ListView, DetailView
 
 from webapp.forms import TaskForm
 from webapp.models import Task
-from webapp.views.base_views import DetailView
+
 
 
 class IndexView(ListView):
@@ -16,9 +16,8 @@ class IndexView(ListView):
 
 
 class TaskView(DetailView):
-    context_key = 'task'
+    context_object_name = 'task'
     model = Task
-    object_pk = 0
     template_name = 'issue/task.html'
 
 
