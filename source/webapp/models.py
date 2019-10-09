@@ -12,6 +12,10 @@ class Project(models.Model):
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Время изменения')
 
 
+    def __str__(self):
+        return self.name
+
+
 class Task(models.Model):
 
     project = models.ForeignKey('webapp.Project', related_name='tasks', null=True, blank=False,

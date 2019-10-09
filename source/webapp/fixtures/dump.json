@@ -1,41 +1,57 @@
 [
 {
-  "model": "webapp.task",
+  "model": "auth.user",
   "pk": 1,
   "fields": {
-    "summary": "task1",
-    "description": "First task",
-    "status": 1,
-    "type": 1,
-    "created_at": "2019-09-26T05:00:00.455Z"
+    "password": "pbkdf2_sha256$150000$aoeh0VKvXVBl$+TOZh4GAH3k3Mo6cXPkCd6J+Om/iIl/LCXeOGoQWygU=",
+    "last_login": "2019-10-09T17:43:53.294Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2019-09-25T18:12:36.380Z",
+    "groups": [],
+    "user_permissions": []
   }
 },
 {
-  "model": "webapp.task",
-  "pk": 2,
-  "fields": {
-    "summary": "task2",
-    "description": "Second task",
-    "status": 2,
-    "type": 2,
-    "created_at": "2019-09-26T05:00:38.461Z"
-  }
-},
-{
-  "model": "webapp.task",
+  "model": "webapp.project",
   "pk": 3,
   "fields": {
-    "summary": "task3",
-    "description": "The third task",
-    "status": 3,
-    "type": 3,
-    "created_at": "2019-09-26T05:01:06.174Z"
+    "name": "project1",
+    "description": "The first project",
+    "created_at": "2019-10-09T17:48:07.521Z",
+    "updated_at": "2019-10-09T17:48:07.521Z"
+  }
+},
+{
+  "model": "webapp.project",
+  "pk": 4,
+  "fields": {
+    "name": "project2",
+    "description": "The second project",
+    "created_at": "2019-10-09T17:48:25.261Z",
+    "updated_at": "2019-10-09T17:48:25.262Z"
+  }
+},
+{
+  "model": "webapp.project",
+  "pk": 5,
+  "fields": {
+    "name": "project3",
+    "description": "The third project",
+    "created_at": "2019-10-09T17:48:40.842Z",
+    "updated_at": "2019-10-09T17:48:40.842Z"
   }
 },
 {
   "model": "webapp.task",
   "pk": 4,
   "fields": {
+    "project": 5,
     "summary": "task4",
     "description": "the fourth task",
     "status": 1,
@@ -45,13 +61,50 @@
 },
 {
   "model": "webapp.task",
-  "pk": 5,
+  "pk": 11,
   "fields": {
-    "summary": "task5",
-    "description": "The fifth task",
+    "project": 4,
+    "summary": "test",
+    "description": "test",
+    "status": 14,
+    "type": 1,
+    "created_at": "2019-09-26T11:45:12.981Z"
+  }
+},
+{
+  "model": "webapp.task",
+  "pk": 15,
+  "fields": {
+    "project": 3,
+    "summary": "task1",
+    "description": "klnvslkfnvdfklnbvldfbf",
+    "status": 1,
+    "type": 1,
+    "created_at": "2019-10-09T17:49:47.051Z"
+  }
+},
+{
+  "model": "webapp.task",
+  "pk": 16,
+  "fields": {
+    "project": 4,
+    "summary": "task4",
+    "description": "dlknvfklvndfkvd",
     "status": 2,
     "type": 2,
-    "created_at": "2019-09-26T05:01:48.400Z"
+    "created_at": "2019-10-09T17:50:25.005Z"
+  }
+},
+{
+  "model": "webapp.task",
+  "pk": 17,
+  "fields": {
+    "project": 5,
+    "summary": "task6",
+    "description": "ergegetgetger",
+    "status": 3,
+    "type": 3,
+    "created_at": "2019-10-09T17:50:42.295Z"
   }
 },
 {
@@ -76,6 +129,13 @@
   }
 },
 {
+  "model": "webapp.status",
+  "pk": 14,
+  "fields": {
+    "name": "unknown1"
+  }
+},
+{
   "model": "webapp.type",
   "pk": 1,
   "fields": {
@@ -94,24 +154,6 @@
   "pk": 3,
   "fields": {
     "name": "enhancement"
-  }
-},
-{
-  "model": "auth.user",
-  "pk": 1,
-  "fields": {
-    "password": "pbkdf2_sha256$150000$aoeh0VKvXVBl$+TOZh4GAH3k3Mo6cXPkCd6J+Om/iIl/LCXeOGoQWygU=",
-    "last_login": "2019-09-26T04:56:35.101Z",
-    "is_superuser": true,
-    "username": "admin",
-    "first_name": "",
-    "last_name": "",
-    "email": "",
-    "is_staff": true,
-    "is_active": true,
-    "date_joined": "2019-09-25T18:12:36.380Z",
-    "groups": [],
-    "user_permissions": []
   }
 }
 ]

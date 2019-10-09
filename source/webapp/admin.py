@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from webapp.models import Task, Status, Type
+from webapp.models import Task, Status, Type, Project
+
+admin.site.register(Project)
 
 admin.site.register(Task)
 
