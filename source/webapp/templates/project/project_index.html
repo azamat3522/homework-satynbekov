@@ -20,8 +20,8 @@
         <p>Data:{{ project.created_at|date:'d.m.Y H:i:s'}}</p>
             <p>
                 <a href="{% url 'project_view' project.pk %}">More...</a>
-{#                <a href="{% url 'task_update' task.pk %}">Update</a>#}
-{#                <a href="{% url 'task_delete' task.pk %}">Delete</a>#}
+                <a href="{% url 'project_update' project.pk %}">Update</a>
+                <a href="{% url 'project_delete' project.pk %}">Delete</a>
             </p>
         <hr/>
     {% endfor %}

@@ -4,8 +4,8 @@
 
 {% block menu %}
     <li><a href="{% url 'project'%}">Projects list</a></li>
-{#    <li><a href="{% url 'article_update' article.pk %}">Edit</a></li>#}
-{#    <li><a href="{% url 'article_delete' article.pk %}">Delete</a></li>#}
+    <li><a href="{% url 'project_update' project.pk %}">Edit</a></li>
+    <li><a href="{% url 'project_delete' project.pk %}">Delete</a></li>
 
 {% endblock %}
 
@@ -19,17 +19,16 @@
     {% endif %}
     <div class="task-list">
         {% for task in tasks %}
-            <div class="project">
+            <div class="task">
                 <p>{{ task.summary }} commented at {{ task.created_at|date:'d.m.Y H:i:s' }}</p>
                 <div class="pre">{{ task.description }}</div>
-{#                <p class="comment-links">#}
-{#                    <a href="{% url 'comment_update' comment.pk %}">Edit</a>#}
-{#                    <a href="{% url 'comment_delete' comment.pk %}">Delete</a>#}
-{#                </p>#}
-                <hr/>
+                <p class="task-links">
+                    <a href="{% url 'task_update' task.pk %}">Edit</a>
+                    <a href="{% url 'task_delete' task.pk %}">Delete</a>
+                </p>
             </div>
         {% empty %}
-            <p>No comments yet.</p>
+            <p>No tasks yet.</p>
         {% endfor %}
     </div>
     {% if is_paginated %}
