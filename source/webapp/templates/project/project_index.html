@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block menu %}
+{#    <li><a href="{% url 'task_add' %}">Add Article</a></li>#}
+{#    <li><a href="{% url 'status' %}">Statuses</a></li>#}
+{#    <li><a href="{% url 'type' %}">Types</a></li>#}
+
+{% endblock %}
+
+{% block content %}
+
+    <h1>Projects:</h1>
+    <hr/>
+    {% if is_paginated %}
+        {% include 'partial/pagination.html' %}
+    {% endif %}
+    <hr/>
+    {% for project in projects %}
+        {% csrf_token %}
+        <h2>Name:{{ project.name }}</h2>
+        <div>Description: {{ project.description }}</div>
+        <p>Data:{{ project.created_at|date:'d.m.Y H:i:s'}}</p>
+            <p>
+                <a href="{% url 'project_view' project.pk %}">More...</a>
+{#                <a href="{% url 'task_update' task.pk %}">Update</a>#}
+{#                <a href="{% url 'task_delete' task.pk %}">Delete</a>#}
+            </p>
+        <hr/>
+    {% endfor %}
+
+{% endblock %}

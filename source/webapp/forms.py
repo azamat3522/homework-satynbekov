@@ -19,3 +19,9 @@ class TypeForm(forms.ModelForm):
     class Meta:
         model = Type
         fields = ['name']
+
+
+class ProjectTaskForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ['summary', 'description']
