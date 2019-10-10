@@ -1,6 +1,6 @@
 from django import forms
 from django.forms import widgets
-from webapp.models import Status, Type, Task
+from webapp.models import Status, Type, Task, Project
 
 
 class TaskForm(forms.ModelForm):
@@ -19,6 +19,12 @@ class TypeForm(forms.ModelForm):
     class Meta:
         model = Type
         fields = ['name']
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        exclude = ['created_at', 'updated_at']
 
 
 class ProjectTaskForm(forms.ModelForm):
