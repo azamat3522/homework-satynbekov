@@ -1,8 +1,9 @@
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
-from webapp.forms import ProjectTaskForm, ProjectForm
+from webapp.forms import ProjectTaskForm, ProjectForm, SimpleSearchForm
 from webapp.models import Project
 
 
@@ -13,6 +14,21 @@ class ProjectIndexView(ListView):
     ordering = ['created_at']
     paginate_by = 3
     paginate_orphans = 1
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['form'] = SimpleSearchForm()
+        return context
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        form = SimpleSearchForm(self.request.GET)
+        if form.is_valid():
+            query = form.cleaned_data['search']
+            if query:
+                queryset = queryset.filter(name__icontains=query)
+        return queryset
+
 
 
 class ProjectView(DetailView):
@@ -61,3 +77,4 @@ class ProjectDeleteView(DeleteView):
     template_name = 'project/project_delete.html'
     context_object_name = 'project'
     success_url = reverse_lazy('project')
+
