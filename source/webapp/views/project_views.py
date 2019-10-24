@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from webapp.forms import ProjectTaskForm, ProjectForm, SimpleSearchForm
 from webapp.models import Project
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 class ProjectIndexView(ListView):
     context_object_name = 'projects'
@@ -53,7 +53,7 @@ class ProjectView(DetailView):
         context['is_paginated'] = page.has_other_pages()
 
 
-class ProjectCreateView(CreateView):
+class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     template_name = 'project/project_create.html'
     form_class = ProjectForm
@@ -62,7 +62,7 @@ class ProjectCreateView(CreateView):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
 
-class ProjectUpdateView(UpdateView):
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     template_name = 'project/project_update.html'
     context_object_name = 'project'
@@ -72,7 +72,7 @@ class ProjectUpdateView(UpdateView):
         return reverse('project_view', kwargs={'pk': self.object.pk})
 
 
-class ProjectDeleteView(DeleteView):
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Project
     template_name = 'project/project_delete.html'
     context_object_name = 'project'
