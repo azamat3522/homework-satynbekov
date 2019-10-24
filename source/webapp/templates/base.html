@@ -17,6 +17,11 @@
        <ul class="menu w-100">
            <li><a href="{% url 'index' %}">Home</a></li>
            {% block menu %}{% endblock %}
+            {% if request.user.is_authenticated %}
+                <li><a href="{% url 'logout'  %}">Log Out</a></li>
+            {% else %}
+                <li><a href="{% url 'login'  %}">Log In</a></li>
+            {% endif %}
        </ul>
    </div>
 </nav>
