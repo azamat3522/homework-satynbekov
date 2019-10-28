@@ -7,7 +7,7 @@
     <h1>Update Status</h1>
 
     <form method="POST" action="{% url 'status_update' status.pk %}">
-        {% include 'partial/task_form.html' with button_text="Update" %}
+        {% include 'partial/form.html' with button_text="Update" %}
     </form>
 
 {% endblock %}
