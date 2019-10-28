@@ -5,7 +5,7 @@
 {% block content %}
     <h1>Edit type</h1>
 
-    <form method="post" action="{% url 'type_update' type.pk %}">
+    <form method="post" action="{% url 'webapp:type_update' type.pk %}">
         {% include 'partial/form.html' with button_text="Update" %}
 
     </form>

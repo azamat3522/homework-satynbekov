@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block menu %}
-    <li><a href="{% url 'status_add' %}">Add Status</a></li>
+    <li><a href="{% url 'webapp:status_add' %}">Add Status</a></li>
 {% endblock %}
 
 {% block content %}
@@ -13,8 +13,8 @@
         {% csrf_token %}
         <h2>Status:{{ status.name }}</h2>
             <p>
-                <a href="{% url 'status_update' status.pk %}">Update</a>
-                <a href="{% url 'status_delete' status.pk %}">Delete</a>
+                <a href="{% url 'webapp:status_update' status.pk %}">Update</a>
+                <a href="{% url 'webapp:status_delete' status.pk %}">Delete</a>
             </p>
         <hr/>
     {% endfor %}

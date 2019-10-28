@@ -6,10 +6,10 @@
 {% block content %}
     <h1>Are you sure to delete {{ type }}?</h1>
 
-    <form method="POST" action="{% url 'type_delete' type.pk %}" class="text-centre">
+    <form method="POST" action="{% url 'webapp:type_delete' type.pk %}" class="text-centre">
         {% csrf_token %}
         <p><input type="submit" value="Confirm" id="input"></p>
-        <p><a href="{% url 'type'%}">Cancel</a></p>
+        <p><a href="{% url 'webapp:type'%}">Cancel</a></p>
     </form>
 
 {% endblock %}

@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block menu %}
-    <li><a href="{% url 'task_add' %}">Add Article</a></li>
-    <li><a href="{% url 'status' %}">Statuses</a></li>
-    <li><a href="{% url 'type' %}">Types</a></li>
-    <li><a href="{% url 'project' %}">Projects</a></li>
+    <li><a href="{% url 'webapp:task_add' %}">Add Article</a></li>
+    <li><a href="{% url 'webapp:status' %}">Statuses</a></li>
+    <li><a href="{% url 'webapp:type' %}">Types</a></li>
+    <li><a href="{% url 'webapp:project' %}">Projects</a></li>
     <div class="float-right">{% include 'partial/simple_search.html' %}</div>
 
 {% endblock %}
@@ -25,9 +25,9 @@
         <div>Type:{{ task.type }}</div>
         <p>Data:{{ task.created_at|date:'d.m.Y H:i:s'}}</p>
             <p>
-                <a href="{% url 'task_view' task.pk %}">More...</a>
-                <a href="{% url 'task_update' task.pk %}">Update</a>
-                <a href="{% url 'task_delete' task.pk %}">Delete</a>
+                <a href="{% url 'webapp:task_view' task.pk %}">More...</a>
+                <a href="{% url 'webapp:task_update' task.pk %}">Update</a>
+                <a href="{% url 'webapp:task_delete' task.pk %}">Delete</a>
             </p>
         <hr/>
     {% endfor %}

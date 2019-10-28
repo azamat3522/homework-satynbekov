@@ -16,7 +16,7 @@ def login_view(request):
             next_url = request.GET.get('next')
             if next_url:
                 return redirect(next_url)
-            return redirect('index')
+            return redirect('webapp:index')
         else:
             context['has_error'] = True
     return render(request, 'login.html', context=context)
@@ -24,7 +24,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('index')
+    return redirect('webapp:index')
 
 
 def register_view(request):
@@ -37,12 +37,13 @@ def register_view(request):
             user = User(
                 username=form.cleaned_data['username'],
                 first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name']
+                last_name=form.cleaned_data['last_name'],
+                email=form.cleaned_data['email']
             )
             user.set_password(form.cleaned_data['password'])
             user.save()
             login(request, user)
-            return redirect('index')
+            return redirect('webapp:index')
         else:
             return render(request, 'register.html', {'form': form})
 

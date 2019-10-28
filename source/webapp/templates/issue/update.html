@@ -3,13 +3,13 @@
 {% block title %}Edit{% endblock %}
 
 {% block menu %}
-    <li><a href="{% url 'task_view' task.pk %}">View</a></li>
+    <li><a href="{% url 'webapp:task_view' task.pk %}">View</a></li>
 {% endblock %}
 
 {% block content %}
     <h1>Edit Task</h1>
 
-    <form method="POST" action="{% url 'task_update' task.pk %}">
+    <form method="POST" action="{% url 'webapp:task_update' task.pk %}">
         {% include 'partial/form.html' with button_text="Update" %}
     </form>
 

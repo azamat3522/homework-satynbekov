@@ -6,10 +6,10 @@
 {% block content %}
     <h1>Are you sure to delete{{ status }}?</h1>
 
-    <form method="POST" action="{% url 'status_delete' status.pk %}" class="text-centre">
+    <form method="POST" action="{% url 'webapp:status_delete' status.pk %}" class="text-centre">
         {% csrf_token %}
         <p><input type="submit" value="Confirm" id="input"></p>
-        <p><a href="{% url 'status'%}">Cancel</a></p>
+        <p><a href="{% url 'webapp:status'%}">Cancel</a></p>
     </form>
 
 {% endblock %}
