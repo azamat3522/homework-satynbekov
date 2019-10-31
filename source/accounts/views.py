@@ -87,7 +87,6 @@ class UserListView(ListView):
     context_object_name = 'users'
     model = User
     template_name = 'user_list.html'
-    ordering = ['created_at']
     paginate_by = 3
     paginate_orphans = 1
 
