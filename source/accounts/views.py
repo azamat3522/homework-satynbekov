@@ -1,8 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
+from django.urls import reverse
+from django.views.generic import DetailView, UpdateView, ListView
 
-from accounts.forms import UserCreationForm
+from accounts.forms import UserCreationForm, UserChangeForm, UserChangePasswordForm
 
 
 def login_view(request):
@@ -47,4 +50,44 @@ def register_view(request):
         else:
             return render(request, 'register.html', {'form': form})
 
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'user_detail.html'
+    context_object_name = 'user_obj'
+
+
+class UserChangeView(UserPassesTestMixin, UpdateView):
+    model = User
+    template_name = 'user_update.html'
+    context_object_name = 'user_obj'
+    form_class = UserChangeForm
+
+    def test_func(self):
+        return self.get_object() == self.request.user
+
+    def get_success_url(self):
+        return reverse('accounts:user_detail', kwargs={'pk': self.object.pk})
+
+
+class UserChangePasswordView(UserPassesTestMixin, UpdateView):
+    model = User
+    template_name = 'user_change_password.html'
+    form_class = UserChangePasswordForm
+    context_object_name = 'user_obj'
+
+    def test_func(self):
+        return self.get_object() == self.request.user
+
+    def get_success_url(self):
+        return reverse('accounts:login')
+
+
+class UserListView(ListView):
+    context_object_name = 'users'
+    model = User
+    template_name = 'user_list.html'
+    ordering = ['created_at']
+    paginate_by = 3
+    paginate_orphans = 1
 
