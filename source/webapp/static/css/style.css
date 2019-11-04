@@ -111,3 +111,11 @@ h2 {
 .task .task-links {
     margin: 5px 0 0;
 }
+
+.avatar {
+    display: inline-block;
+    float: left;
+    width: 250px;
+    height: auto;
+    margin-right: 20px;
+}
