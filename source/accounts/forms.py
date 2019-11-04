@@ -1,57 +1,56 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
+from accounts.models import Profile
 
-class UserCreationForm(forms.Form):
-    username = forms.CharField(max_length=100, label='Username', required=True)
-    first_name = forms.CharField(max_length=100, label='First Name', required=False)
-    last_name = forms.CharField(max_length=100, label='Second Name', required=False)
-    password = forms.CharField(max_length=100, label='Password', required=True,
-                               widget=forms.PasswordInput)
-    password_confirm = forms.CharField(max_length=100, label='Password Confirm', required=True,
-                                       widget=forms.PasswordInput)
-    email = forms.EmailField(label='Email', required=True)
+
+class SignUpForm(UserCreationForm):
+    email = forms.EmailField(required=True, label='Email')
+
+    class Meta(UserCreationForm.Meta):
+        fields = ('username', 'email')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
         try:
             User.objects.get(email=email)
-            raise ValidationError('User with this email already exists',
-                                  code='user_email_exists')
+            raise ValidationError('Email already registered.', code='email_registered')
         except User.DoesNotExist:
             return email
 
-    def clean_username(self):
-        username = self.cleaned_data.get('username')
-        try:
-            User.objects.get(username=username)
-            raise ValidationError('User with this username already exists',
-                                  code='user_username_exists')
-        except User.DoesNotExist:
-            return username
-
-    def clean(self):
-        super().clean()
-        password_1 = self.cleaned_data['password']
-        password_2 = self.cleaned_data['password_confirm']
-        first_name = self.cleaned_data['first_name']
-        last_name = self.cleaned_data['last_name']
-
-        if password_1 != password_2:
-            raise ValidationError('Passwords do not match',
-                                  code='passwords_do_not_match')
-
-        if not first_name and not last_name:
-            raise ValidationError('First name or Last name must be filled')
-
-        return self.cleaned_data
-
 
 class UserChangeForm(forms.ModelForm):
+    avatar = forms.ImageField(label='Аватар', required=False)
+    about_me = forms.CharField(label='О себе', required=False)
+    github_profile = forms.URLField(label='Профиль github', required=False)
+
+    def get_initial_for_field(self, field, field_name):
+        if field_name in self.Meta.profile_fields:
+            return getattr(self.instance.profile, field_name)
+        return super().get_initial_for_field(field, field_name)
+
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        user.profile = self.save_profile(commit)
+        return user
+
+    def save_profile(self, commit=True):
+        profile, _ = Profile.objects.get_or_create(user=self.instance)
+        for field in self.Meta.profile_fields:
+            setattr(profile, field, self.cleaned_data.get(field))
+        if not profile.avatar:
+            profile.avatar = None
+        if commit:
+            profile.save()
+        return profile
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'email']
+        profile_fields = ['avatar', 'about_me', 'github_profile']
+
 
 
 class UserChangePasswordForm(forms.ModelForm):

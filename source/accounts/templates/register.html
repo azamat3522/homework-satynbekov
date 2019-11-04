@@ -3,7 +3,8 @@
 
 {% block content %}
     <h1>Sign Up</h1>
-    <form action="{% url 'accounts:register' %}" method="post">
+    <form action="{% url 'accounts:register' %}" method="post"
+        enctype="multipart/form-data">
         {% include 'partial/form.html' with button_text='Сохранить' %}
     </form>
 {% endblock %}

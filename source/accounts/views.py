@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.views.generic import DetailView, UpdateView, ListView
 
-from accounts.forms import UserCreationForm, UserChangeForm, UserChangePasswordForm
+from accounts.forms import UserCreationForm, UserChangeForm, UserChangePasswordForm, SignUpForm
+from accounts.models import Profile
 
 
 def login_view(request):
@@ -32,23 +33,18 @@ def logout_view(request):
 
 def register_view(request):
     if request.method == 'GET':
-        form = UserCreationForm()
-        return render(request, 'register.html', {'form': form})
+        form = SignUpForm()
+        return render(request, 'register.html', context={'form': form})
     elif request.method == 'POST':
-        form = UserCreationForm(data=request.POST)
+        form = SignUpForm(data=request.POST)
         if form.is_valid():
-            user = User(
-                username=form.cleaned_data['username'],
-                first_name=form.cleaned_data['first_name'],
-                last_name=form.cleaned_data['last_name'],
-                email=form.cleaned_data['email']
-            )
-            user.set_password(form.cleaned_data['password'])
+            user = form.save(commit=False)
+            user.is_active = True
             user.save()
-            login(request, user)
+            Profile.objects.create(user=user)
             return redirect('webapp:index')
         else:
-            return render(request, 'register.html', {'form': form})
+            return render(request, 'register.html', context={'form': form})
 
 
 class UserDetailView(DetailView):
