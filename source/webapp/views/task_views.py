@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from webapp.forms import TaskForm, SimpleSearchForm
 from webapp.models import Task
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 class IndexView(ListView):
@@ -62,19 +62,27 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         return reverse('webapp:task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
+class TaskUpdateView(UserPassesTestMixin, UpdateView):
     form_class = TaskForm
     template_name = 'issue/update.html'
     model = Task
     context_object_name = 'task'
 
+    def test_func(self):
+        obj = self.get_object()
+        return obj.project.project_users.filter(user=self.request.user)
+
     def get_success_url(self):
         return reverse('webapp:task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskDeleteView(LoginRequiredMixin, DeleteView):
+class TaskDeleteView(UserPassesTestMixin, DeleteView):
     template_name = 'issue/delete.html'
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('webapp:index')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.project.project_users.filter(user=self.request.user)
 
