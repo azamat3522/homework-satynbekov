@@ -26,6 +26,13 @@ class UserChangeForm(forms.ModelForm):
     about_me = forms.CharField(label='О себе', required=False)
     github_profile = forms.URLField(label='Профиль github', required=False)
 
+    def clean_github_profile(self):
+        profile = self.cleaned_data.get('github_profile')
+        print(profile.startswith('https://github.com/'))
+        if profile.startswith('https://github.com/') and not " " == False:
+            raise ValidationError('Address is un correct', code='address_profile_un_correct')
+        return profile
+
     def get_initial_for_field(self, field, field_name):
         if field_name in self.Meta.profile_fields:
             return getattr(self.instance.profile, field_name)
@@ -50,7 +57,6 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'email']
         profile_fields = ['avatar', 'about_me', 'github_profile']
-
 
 
 class UserChangePasswordForm(forms.ModelForm):
