@@ -8,7 +8,7 @@ from webapp.views import IndexView, TaskCreateView, TaskView, TaskUpdateView, Ta
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('issue/<int:pk>/', TaskView.as_view(), name='task_view'),
-    path('issue/add/', TaskCreateView.as_view(), name="task_add"),
+    path('issue/add/project/<int:pk>/', TaskCreateView.as_view(), name="task_add"),
     path('issue/<int:pk>/update/', TaskUpdateView.as_view(), name='task_update'),
     path('issue/<int:pk>/delete/', TaskDeleteView.as_view(), name='task_delete'),
     path('status', StatusIndexView.as_view(), name='status'),

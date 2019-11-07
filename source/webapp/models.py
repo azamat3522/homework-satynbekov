@@ -16,7 +16,6 @@ class Project(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Время изменения')
 
-
     def __str__(self):
         return self.name
 

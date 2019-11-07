@@ -6,10 +6,10 @@
     <li><a href="{% url 'webapp:project'%}">Projects list</a></li>
     <li><a href="{% url 'webapp:project_update' project.pk %}">Edit</a></li>
     <li><a href="{% url 'webapp:project_delete' project.pk %}">Delete</a></li>
-
 {% endblock %}
 
 {% block content %}
+    <p><a href="{% url 'webapp:task_add' project.pk %}">Add Article</a></p>
     <h1>{{ project.name }}</h1>
     <p>Description:<b>{{ project.description }}</b> at <b>{{ project.created_at|date:'d.m.Y H:i:s'}}</b></p>
 
@@ -18,14 +18,17 @@
         {% include 'partial/pagination.html' %}
     {% endif %}
     <div class="task-list">
+        <hr/>
         {% for task in tasks %}
             <div class="task">
                 <p>{{ task.summary }} commented at {{ task.created_at|date:'d.m.Y H:i:s' }}</p>
+                <p>Created by:{{ task.created_by}}</p>
                 <div class="pre">{{ task.description }}</div>
                 <p class="task-links">
                     <a href="{% url 'webapp:task_update' task.pk %}">Edit</a>
                     <a href="{% url 'webapp:task_delete' task.pk %}">Delete</a>
                 </p>
+                <hr/>
             </div>
         {% empty %}
             <p>No tasks yet.</p>

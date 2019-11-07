@@ -7,7 +7,7 @@ from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 
 from webapp.forms import TaskForm, SimpleSearchForm
-from webapp.models import Task
+from webapp.models import Task, Project
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
@@ -59,9 +59,19 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
     template_name = 'issue/create.html'
     form_class = TaskForm
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['project'] = Project.objects.filter(project_users__user=self.request.user)
+        return kwargs
+
+    def get_project(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Project, pk=pk)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.created_by = self.request.user
+        self.object.project = self.get_project()
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
