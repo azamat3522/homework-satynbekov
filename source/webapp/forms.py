@@ -6,7 +6,7 @@ from webapp.models import Status, Type, Task, Project
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        exclude = ['created_at']
+        exclude = ['created_at', 'created_by']
 
 
 class StatusForm(forms.ModelForm):

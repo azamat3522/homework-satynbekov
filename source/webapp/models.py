@@ -1,4 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
+
+
+def get_admin():
+    return User.objects.get(username='admin').id
 
 
 class Project(models.Model):
@@ -33,9 +38,14 @@ class Task(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Время создания')
 
+    created_by = models.ForeignKey(User, null=False, blank=False, default=get_admin, verbose_name='Автор задачи',
+                                   on_delete=models.PROTECT, related_name='tasks')
+
+    assigned_to = models.ForeignKey(User, null=True, blank=False, verbose_name='Исполнитель задачи',
+                                    on_delete=models.PROTECT, related_name='task')
+
     def __str__(self):
         return self.summary
-
 
 
 class Status(models.Model):
@@ -44,6 +54,7 @@ class Status(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Type(models.Model):
 
