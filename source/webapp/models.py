@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -68,8 +69,8 @@ class Team(models.Model):
                              verbose_name='Пользователь')
     project = models.ForeignKey('webapp.Project', related_name='project_users', on_delete=models.CASCADE,
                                 verbose_name='Проект')
-    start_date = models.DateField(verbose_name='Дата начала работы')
-    end_date = models.DateField(verbose_name='Дата окончания работы')
+    start_date = models.DateField(null=True, verbose_name='Дата начала работы')
+    end_date = models.DateField(null=True, verbose_name='Дата окончания работы')
 
     def __str__(self):
         return "{} | {}".format(self.user, self.project)

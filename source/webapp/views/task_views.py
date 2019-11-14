@@ -8,7 +8,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from webapp.forms import TaskForm, SimpleSearchForm
 from webapp.models import Task, Project
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin, PermissionRequiredMixin
 
 
 class IndexView(ListView):
@@ -54,10 +54,12 @@ class TaskView(DetailView):
     template_name = 'issue/task.html'
 
 
-class TaskCreateView(LoginRequiredMixin, CreateView):
+class TaskCreateView(PermissionRequiredMixin, CreateView):
     model = Task
     template_name = 'issue/create.html'
     form_class = TaskForm
+    permission_required = 'webapp.add_task'
+    permission_denied_message = "Доступ запрещён"
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -79,11 +81,13 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
         return reverse('webapp:task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskUpdateView(UserPassesTestMixin, UpdateView):
+class TaskUpdateView(PermissionRequiredMixin, UpdateView):
     form_class = TaskForm
     template_name = 'issue/update.html'
     model = Task
     context_object_name = 'task'
+    permission_required = 'webapp.change_task'
+    permission_denied_message = "Доступ запрещён"
 
     def test_func(self):
         obj = self.get_object()
@@ -93,11 +97,13 @@ class TaskUpdateView(UserPassesTestMixin, UpdateView):
         return reverse('webapp:task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskDeleteView(UserPassesTestMixin, DeleteView):
+class TaskDeleteView(PermissionRequiredMixin,UserPassesTestMixin, DeleteView):
     template_name = 'issue/delete.html'
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('webapp:index')
+    permission_required = 'webapp.delete_task'
+    permission_denied_message = "Доступ запрещён"
 
     def test_func(self):
         obj = self.get_object()

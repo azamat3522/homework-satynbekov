@@ -3,10 +3,11 @@ from django.contrib.auth.mixins import UserPassesTestMixin
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.views.generic import DetailView, UpdateView, ListView
+from django.views.generic import DetailView, UpdateView, ListView, CreateView
 
 from accounts.forms import UserCreationForm, UserChangeForm, UserChangePasswordForm, SignUpForm
 from accounts.models import Profile
+from django.contrib import messages
 
 
 def login_view(request):
@@ -42,6 +43,7 @@ def register_view(request):
             user.is_active = True
             user.save()
             Profile.objects.create(user=user)
+            messages.warning(request, 'Вы успешно зарегались!')
             return redirect('webapp:index')
         else:
             return render(request, 'register.html', context={'form': form})
@@ -85,4 +87,5 @@ class UserListView(ListView):
     template_name = 'user_list.html'
     paginate_by = 3
     paginate_orphans = 1
+
 

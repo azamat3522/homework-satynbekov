@@ -4,14 +4,42 @@
 
 {% block menu %}
     <li><a href="{% url 'webapp:project'%}">Projects list</a></li>
-    <li><a href="{% url 'webapp:project_update' project.pk %}">Edit</a></li>
-    <li><a href="{% url 'webapp:project_delete' project.pk %}">Delete</a></li>
+    {% if perms.webapp.change_project %}
+        <li><a href="{% url 'webapp:project_update' project.pk %}">Edit</a></li>
+    {% endif %}
+    {% if perms.webapp.delete_product %}
+        <li><a href="{% url 'webapp:project_delete' project.pk %}">Delete</a></li>
+    {% endif %}
+    {% if perms.webapp.change_team %}
+        <li><a href="{% url 'webapp:users_update' project.pk %}">Edit users</a></li>
+    {% endif %}
 {% endblock %}
 
 {% block content %}
-    <p><a href="{% url 'webapp:task_add' project.pk %}">Add Article</a></p>
+    {% if perms.webapp.add_task %}
+        <p><a href="{% url 'webapp:task_add' project.pk %}">Add Article</a></p>
+    {% endif %}
     <h1>{{ project.name }}</h1>
     <p>Description:<b>{{ project.description }}</b> at <b>{{ project.created_at|date:'d.m.Y H:i:s'}}</b></p>
+
+{#    <p>{% for team in project.project_users.all %}#}
+{#            Users:{{ team.user.username }}#}
+{#            {{ team.start_date }}#}
+{#        {% endfor %}#}
+{#    </p>#}
+
+    <h2>Users:</h2>
+    <div class="task-list">
+        <hr/>
+        {% for team in project.project_users.all %}
+            {% if team.end_date == None %}
+                <div class="task">
+                    <p>User:{{ team.user.username }}</p>
+                    <p>Start date:{{ team.start_date}}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
 
     <h2>Tasks:</h2>
     {% if is_paginated %}
@@ -25,8 +53,12 @@
                 <p>Created by:{{ task.created_by}}</p>
                 <div class="pre">{{ task.description }}</div>
                 <p class="task-links">
-                    <a href="{% url 'webapp:task_update' task.pk %}">Edit</a>
-                    <a href="{% url 'webapp:task_delete' task.pk %}">Delete</a>
+                    {% if perms.webapp.change_task %}
+                        <a href="{% url 'webapp:task_update' task.pk %}">Edit</a>
+                    {% endif %}
+                    {% if perms.webapp.delete_task %}
+                        <a href="{% url 'webapp:task_delete' task.pk %}">Delete</a>
+                    {% endif %}
                 </p>
                 <hr/>
             </div>
