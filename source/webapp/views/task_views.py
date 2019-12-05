@@ -97,7 +97,7 @@ class TaskUpdateView(PermissionRequiredMixin, UpdateView):
         return reverse('webapp:task_view', kwargs={'pk': self.object.pk})
 
 
-class TaskDeleteView(PermissionRequiredMixin,UserPassesTestMixin, DeleteView):
+class TaskDeleteView(PermissionRequiredMixin, UserPassesTestMixin, DeleteView):
     template_name = 'issue/delete.html'
     model = Task
     context_object_name = 'task'
