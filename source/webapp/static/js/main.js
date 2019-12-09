@@ -86,3 +86,24 @@ $.ajax({
 
 });
 
+
+$.ajax({
+
+    url: 'http://localhost:8000/api/v1/tasks/16',
+
+    method: 'delete',
+
+    headers: {"Authorization": 'Token ' + localStorage.getItem('apiToken')},
+
+    dataType: 'json',
+
+    contentType: 'application/json',
+
+    success: function(response, status){console.log('delete');},
+
+    error: function(response, status){console.log(response);}
+});
+
+
+
+
